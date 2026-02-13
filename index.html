@@ -32,6 +32,7 @@
       border-radius: 16px;
       margin-bottom: 1rem;
       object-fit: cover;
+      display: block;
     }
 
     h1 {
@@ -134,7 +135,7 @@
     <p id="underImageText">Will you be my Valentine?</p>
     <div class="buttons">
       <button class="yes" onclick="sayYes()">Yes 💖</button>
-      <button class="no" onclick="sayNo()">No 🙈</button>
+      <button class="no" onclick="sayNo()">No 💔</button>
     </div>
   </div>
 
@@ -147,12 +148,18 @@
     let heartbreakCount = 0;
 
     function sayYes() {
-      document.getElementById('titleText').style.display = 'none';
+      // hide title immediately
+      const title = document.getElementById('titleText');
+      if (title.style.display !== 'none') title.style.display = 'none';
+
+      const mainImage = document.getElementById('mainImage');
+      const underText = document.getElementById('underImageText');
+
+      mainImage.src = "yes.jpeg";
+      underText.innerText = "JAGGGOOOO!!!";
+
       document.getElementById('noAudio').pause();
       document.getElementById('yesAudio').play();
-      document.getElementById('mainImage').src = "yes.jpeg";
-      const underText = document.getElementById('underImageText');
-      underText.innerText = "JAGGGOOOO!!!";
 
       for (let i = 0; i < 250; i++) {
         createBurst(randomYesEmoji());
@@ -160,12 +167,18 @@
     }
 
     function sayNo() {
-      document.getElementById('titleText').style.display = 'none';
+      // hide title immediately
+      const title = document.getElementById('titleText');
+      if (title.style.display !== 'none') title.style.display = 'none';
+
+      const mainImage = document.getElementById('mainImage');
+      const underText = document.getElementById('underImageText');
+
+      mainImage.src = "no.jpeg";
+      underText.innerText = "PLEASE";
+
       document.getElementById('yesAudio').pause();
       document.getElementById('noAudio').play();
-      document.getElementById('mainImage').src = "no.jpeg";
-      const underText = document.getElementById('underImageText');
-      underText.innerText = "PLEASE";
 
       heartbreakCount++;
       const counter = document.getElementById('heartbreakCounter');

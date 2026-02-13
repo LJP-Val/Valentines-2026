@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine?</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem 2.5rem;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      max-width: 360px;
+      position: relative;
+      z-index: 5;
+    }
+
+    img.hero {
+      width: 100%;
+      border-radius: 16px;
+      margin-bottom: 1rem;
+      object-fit: cover;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #e63946;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      padding: 0.8rem 1.4rem;
+      border-radius: 999px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .yes {
+      background: #ff1744;
+      color: white;
+    }
+
+    .no {
+      background: #eeeeee;
+      color: #333;
+    }
+
+    .effects {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .burst {
+      position: absolute;
+      animation: explode 7000ms cubic-bezier(.17,.67,.83,.67) forwards;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,1))
+              drop-shadow(0 0 25px rgba(255,0,128,0.8));
+    }
+
+    #heartbreakCounter {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2rem;
+      background: rgba(255,255,255,0.8);
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      z-index: 10;
+      font-weight: bold;
+      display: none;
+      text-align: center;
+    }
+
+    #heartbreakCountNumber {
+      font-size: 1.5rem;
+      margin-top: 0.2rem;
+    }
+
+    @keyframes explode {
+      0% {
+        transform: translate(0,0) scale(0.3);
+        opacity: 1;
+      }
+      70% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) scale(3);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="heartbreakCounter">
+    Times Mayu has broken my heart 😭
+    <div id="heartbreakCountNumber">0</div>
+  </div>
+
+  <div class="card">
+    <img class="hero" id="mainImage" src="photo.jpeg" alt="Us" />
+
+    <h1 id="titleText">Hewwo Mayu-Kutti! ❤️</h1>
+    <p id="underImageText">Will you be my Valentine?</p>
+    <div class="buttons">
+      <button class="yes" onclick="sayYes()">Yes 💖</button>
+      <button class="no" onclick="sayNo()">No 🙈</button>
+    </div>
+  </div>
+
+  <div class="effects" id="effects"></div>
+
+  <audio id="yesAudio" src="yes.m4a"></audio>
+  <audio id="noAudio" src="no.m4a"></audio>
+
+  <script>
+    let heartbreakCount = 0;
+
+    function sayYes() {
+      document.getElementById('titleText').style.display = 'none';
+      document.getElementById('noAudio').pause();
+      document.getElementById('yesAudio').play();
+      document.getElementById('mainImage').src = "yes.jpeg";
+      const underText = document.getElementById('underImageText');
+      underText.innerText = "JAGGGOOOO!!!";
+
+      for (let i = 0; i < 250; i++) {
+        createBurst(randomYesEmoji());
+      }
+    }
+
+    function sayNo() {
+      document.getElementById('titleText').style.display = 'none';
+      document.getElementById('yesAudio').pause();
+      document.getElementById('noAudio').play();
+      document.getElementById('mainImage').src = "no.jpeg";
+      const underText = document.getElementById('underImageText');
+      underText.innerText = "PLEASE";
+
+      heartbreakCount++;
+      const counter = document.getElementById('heartbreakCounter');
+      const number = document.getElementById('heartbreakCountNumber');
+      if (heartbreakCount === 1) counter.style.display = 'block';
+      number.innerText = heartbreakCount;
+
+      for (let i = 0; i < 300; i++) {
+        createBurst(randomNoEmoji());
+      }
+    }
+
+    function randomYesEmoji() {
+      const emojis = ["❤️","💖","💘","💝","🎉","✨","🥰","💕"];
+      return emojis[Math.floor(Math.random() * emojis.length)];
+    }
+
+    function randomNoEmoji() {
+      const emojis = ["😭","😢","💔","😩","🥺"];
+      return emojis[Math.floor(Math.random() * emojis.length)];
+    }
+
+    function createBurst(symbol) {
+      const el = document.createElement('div');
+      el.className = 'burst';
+      el.innerText = symbol;
+
+      el.style.left = '50vw';
+      el.style.top = '50vh';
+
+      const angle = Math.random() * 2 * Math.PI;
+      const distance = Math.random() * 900 + 400;
+      const x = Math.cos(angle) * distance + 'px';
+      const y = Math.sin(angle) * distance + 'px';
+
+      el.style.setProperty('--x', x);
+      el.style.setProperty('--y', y);
+      el.style.fontSize = Math.random() * 50 + 35 + 'px';
+
+      document.getElementById('effects').appendChild(el);
+      setTimeout(() => el.remove(), 7000);
+    }
+  </script>
+</body>
+</html>
